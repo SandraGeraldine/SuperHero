@@ -138,13 +138,18 @@
             "<?= $superhero['full_name'] ?? 'Nombre real no disponible' ?>"
         </div>
 
+        <h2 style="color: #2c3e50; text-align: center; margin: 30px 0; font-size: 22px;">
+            📋 INFORMACIÓN COMPLETA DEL SUPERHÉROE
+        </h2>
+
         <div class="info-grid">
+            <!-- INFORMACIÓN BÁSICA -->
             <div class="info-row">
                 <div class="info-label">
                     <span class="icon">🏢</span>Editorial/Compañía
                 </div>
                 <div class="info-value">
-                    <?= $superhero['publisher_name'] ?? 'No especificada' ?>
+                    <strong><?= $superhero['publisher_name'] ?? 'No especificada' ?></strong>
                 </div>
             </div>
             
@@ -154,7 +159,6 @@
                 </div>
                 <div class="info-value">
                     <?php
-                    // Lógica para determinar la alineación (me gusta como quedó)
                     $alignment = $superhero['alignment'] ?? 'Unknown';
                     $alignmentClass = 'alignment-unknown';
                     
@@ -187,22 +191,20 @@
                 </div>
                 <div class="info-value">
                     <?php 
-                    // Mostrar altura con conversiones (útil!)
                     if (!empty($superhero['height_cm'])) {
                         echo '<strong>' . $superhero['height_cm'] . ' cm</strong>';
                         $meters = $superhero['height_cm'] / 100;
                         echo ' (' . number_format($meters, 2) . ' metros)';
                         
-                        // Comparación divertida
                         if ($superhero['height_cm'] > 200) {
                             echo ' - ¡Muy alto!';
                         } elseif ($superhero['height_cm'] < 150) {
                             echo ' - Compacto';
                         } else {
-                            echo ' - Altura normal ';
+                            echo ' - Altura normal';
                         }
                     } else {
-                        echo 'No especificada ';
+                        echo 'No especificada';
                     }
                     ?>
                 </div>
@@ -216,19 +218,16 @@
                     <?php 
                     if (!empty($superhero['weight_kg'])) {
                         echo '<strong>' . $superhero['weight_kg'] . ' kg</strong>';
-                        
-                        // Conversión a libras (por si acaso)
                         $pounds = $superhero['weight_kg'] * 2.205;
                         echo ' (' . round($pounds) . ' lbs)';
                         
-                        // Comentario divertido basado en peso
                         if ($superhero['weight_kg'] > 100) {
-                            echo ' - ¡Fuerte! ';
+                            echo ' - ¡Fuerte!';
                         } else {
-                            echo ' - Ágil ';
+                            echo ' - Ágil';
                         }
                     } else {
-                        echo 'No especificado ';
+                        echo 'No especificado';
                     }
                     ?>
                 </div>
@@ -243,19 +242,107 @@
                     <small style="color: #6c757d;"> (identificador único)</small>
                 </div>
             </div>
+
+            <!-- SEPARADOR -->
+            <div style="height: 20px; background: linear-gradient(90deg, transparent, #dee2e6, transparent); margin: 10px 0;"></div>
+
+            <!-- ATRIBUTOS DE PODER -->
+            <?php if (!empty($attributes)): ?>
+                <?php foreach ($attributes as $attr): ?>
+                <div class="info-row">
+                    <div class="info-label">
+                        <span class="icon">
+                            <?php
+                            switch($attr['attribute_name']) {
+                                case 'Intelligence': echo '🧠'; break;
+                                case 'Strength': echo '💪'; break;
+                                case 'Speed': echo '⚡'; break;
+                                case 'Durability': echo '🛡️'; break;
+                                case 'Power': echo '🔥'; break;
+                                case 'Combat': echo '⚔️'; break;
+                                default: echo '📊'; break;
+                            }
+                            ?>
+                        </span>
+                        <?= $attr['attribute_name'] ?>
+                    </div>
+                    <div class="info-value">
+                        <div style="display: flex; align-items: center;">
+                            <strong style="font-size: 16px; margin-right: 15px; min-width: 60px;">
+                                <?= $attr['attribute_value'] ?>/100
+                            </strong>
+                            
+                            <!-- Barra de progreso -->
+                            <div style="background: #e9ecef; border-radius: 8px; width: 120px; height: 16px; overflow: hidden; margin-right: 10px;">
+                                <?php 
+                                $value = $attr['attribute_value'];
+                                $barColor = '#e74c3c, #c0392b';
+                                if ($value >= 80) $barColor = '#27ae60, #2ecc71';
+                                elseif ($value >= 60) $barColor = '#f39c12, #e67e22';
+                                elseif ($value >= 40) $barColor = '#3498db, #2980b9';
+                                ?>
+                                <div style="background: linear-gradient(90deg, <?= $barColor ?>); height: 100%; width: <?= $attr['attribute_value'] ?>%; border-radius: 8px;"></div>
+                            </div>
+                            
+                            <small style="color: #6c757d; font-size: 11px;">
+                                <?php
+                                if ($value >= 90) echo 'Excepcional';
+                                elseif ($value >= 80) echo 'Excelente';
+                                elseif ($value >= 70) echo 'Muy Bueno';
+                                elseif ($value >= 60) echo 'Bueno';
+                                elseif ($value >= 50) echo 'Promedio';
+                                else echo 'Bajo';
+                                ?>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <!-- SEPARADOR -->
+            <div style="height: 20px; background: linear-gradient(90deg, transparent, #dee2e6, transparent); margin: 10px 0;"></div>
+
+            <!-- SUPERPODERES -->
+            <?php if (!empty($powers)): ?>
+                <?php 
+                $powerCount = 0;
+                foreach ($powers as $power): 
+                    $powerCount++;
+                ?>
+                <div class="info-row">
+                    <div class="info-label">
+                        <span class="icon">⚡</span>Poder #<?= $powerCount ?>
+                    </div>
+                    <div class="info-value">
+                        <strong><?= $power['power_name'] ?></strong>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                
+                <!-- Total de poderes -->
+                <div class="info-row">
+                    <div class="info-label">
+                        <span class="icon">🎯</span>Total de Poderes
+                    </div>
+                    <div class="info-value">
+                        <strong style="color: #27ae60; font-size: 16px;">
+                            <?= count($powers) ?> superpoderes únicos
+                        </strong>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
     <div class="footer">
-        <p><strong>Sistema de Gestión de Superhéroes</strong></p>
-        <p>Desarrollado por <strong>Sandra De La Cruz</strong> - Proyecto Universitario</p>
-        <p>ste documento fue generado automáticamente desde nuestra base de datos</p>
-        <p>Fecha y hora de generación: <?= date('d \d\e F \d\e Y \a \l\a\s H:i:s') ?></p>
+        <p><strong>Sistema de Gestion de Superheroes</strong></p>
+        <p>Desarrollado por <strong>Sandra De La Cruz</strong> - Proyecto Tarea05</p>
+        <p>Este documento fue generado con el fin de poder lograr Practicar y interactuar con la base de datos Superhero</p>
         <p style="margin-top: 15px; font-size: 11px; color: #9ca3af;">
-             <em>¡Gracias por usar mi buscador de superhéroes!</em> 
+             <em>Gracias por llegar hasta esta parte de mi buscador de superheroes!</em> 
         </p>
     </div>
-    
-    <!-- Comentario personal: ¡Me quedó genial este PDF! -->
+
 </body>
 </html>
