@@ -182,7 +182,9 @@ class ReporteController extends BaseController{
         $result = $cn->query($query, [$searchPattern, $searchPattern]);
         $suggestions = $result->getResultArray();
         
-        $data = [];
+        $data = [
+          
+        ];
         foreach ($suggestions as $hero) {
             $data[] = [
                 'id' => $hero['id'],
