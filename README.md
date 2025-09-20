@@ -17,7 +17,7 @@ Este proyecto es un sistema web completo para la gestión y consulta de informac
 - Generar documentos PDF 
 - Implementar búsqueda con autocompletado AJAX
 - Aplicar diseño responsivo con Bootstrap 5
-- Manejar base de datos relacional con MySQL
+- Manejar base de datos relacional con Heydi
 
 ---
 ##  Funcionalidades Principales
@@ -119,7 +119,7 @@ Este proyecto es un sistema web completo para la gestión y consulta de informac
 - **Solución:** Revisión completa de estructura HTML y eliminación de código duplicado
 - **Lección:** Importancia de validar estructura HTML
 
-### 💡 **Mejoras Implementadas**
+### **Mejoras Implementadas**
 
 1. **Búsqueda Inteligente:** Autocompletado que busca tanto en nombre de superhéroe como nombre real
 2. **PDF Completo:** Documento con toda la información (básica + atributos + poderes)
@@ -159,19 +159,14 @@ Este proyecto es un sistema web completo para la gestión y consulta de informac
    cd superhero
    ```
 
-2. **Instalar dependencias**
-   ```bash
-   composer install
-   ```
-
-3. **Configurar base de datos**
+2. **Configurar base de datos**
    - Crear base de datos `superhero`
    - Importar archivos SQL en orden:
      - `01_reference_data.sql`
      - `02_hero_attribute.sql` 
      - `03_hero_power.sql`
 
-4. **Configurar CodeIgniter**
+3. **Configurar CodeIgniter**
    - Copiar `.env.example` a `.env`
    - Configurar credenciales de base de datos
    - Establecer `baseURL`
