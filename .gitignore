@@ -126,3 +126,7 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# Ignorar archivos de respaldo y carpeta temporal
+*.bak
+temp/
