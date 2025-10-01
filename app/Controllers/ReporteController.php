@@ -311,12 +311,110 @@ class ReporteController extends BaseController{
         $html = view('reportes/reporte5_pdf', $data);
 
         $html2Pdf = new Html2Pdf('P','A4','es',true);
-        
         try {
             $html2Pdf->writeHTML($html);
 
             $this->response->setHeader('Content-Type','application/pdf');
             $filename = 'Reporte5-Superhero-' . str_replace(' ', '-', $superhero['superhero_name']) . '.pdf';
+            $html2Pdf->output($filename);
+            exit();
+        }
+        catch(Html2PdfException $e){
+            $html2Pdf->clean();
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getMessage();
+        }
+    }
+
+    // REPORTE 6 - Vista principal del formulario personalizado
+    public function getReport6()
+    {
+        return view('reportes/reporte6');
+    }
+
+    // REPORTE 6 - Método para generar PDF con parámetros personalizados
+    public function Report6PDF()
+    {
+        $titulo = $this->request->getPost('titulo');
+        $genero = $this->request->getPost('genero');
+        $limite = $this->request->getPost('limite');
+        
+        // Validaciones
+        if (empty($titulo)) {
+            return redirect()->back()->with('error', 'El título es requerido');
+        }
+        
+        if (empty($genero)) {
+            return redirect()->back()->with('error', 'Debe seleccionar al menos un género');
+        }
+        
+        $limite = (int)$limite;
+        if ($limite < 10 || $limite > 20) {
+            return redirect()->back()->with('error', 'El límite debe estar entre 10 y 20');
+        }
+
+        $cn = \Config\Database::connect();
+        
+        // Construir la consulta según el género seleccionado
+        $whereClause = "";
+        $params = [];
+        
+        if (is_array($genero)) {
+            $genderConditions = [];
+            foreach ($genero as $g) {
+                if ($g === 'masculino') {
+                    $genderConditions[] = "SH.gender_id = 1";
+                } elseif ($g === 'femenino') {
+                    $genderConditions[] = "SH.gender_id = 2";
+                } elseif ($g === 'na') {
+                    $genderConditions[] = "SH.gender_id IS NULL OR SH.gender_id NOT IN (1, 2)";
+                }
+            }
+            if (!empty($genderConditions)) {
+                $whereClause = "WHERE (" . implode(" OR ", $genderConditions) . ")";
+            }
+        }
+        
+        $query = "
+            SELECT 
+                SH.id,
+                SH.superhero_name,
+                SH.full_name,
+                SH.height_cm,
+                SH.weight_kg,
+                PB.publisher_name,
+                AL.alignment,
+                G.gender as gender_name
+            FROM superhero SH
+            LEFT JOIN publisher PB ON SH.publisher_id = PB.id
+            LEFT JOIN alignment AL ON SH.alignment_id = AL.id
+            LEFT JOIN gender G ON SH.gender_id = G.id
+            $whereClause
+            ORDER BY SH.superhero_name
+            LIMIT ?
+        ";
+        
+        $params[] = $limite;
+        $result = $cn->query($query, $params);
+        $superheroes = $result->getResultArray();
+
+        $data = [
+            "titulo" => $titulo,
+            "superheroes" => $superheroes,
+            "genero_seleccionado" => $genero,
+            "limite" => $limite,
+            "total_encontrados" => count($superheroes),
+            "estilos" => view('reportes/estilos')
+        ];
+
+        $html = view('reportes/reporte6_pdf', $data);
+
+        $html2Pdf = new Html2Pdf('P','A4','es',true);
+        
+        try {
+            $html2Pdf->writeHTML($html);
+            $this->response->setHeader('Content-Type','application/pdf');
+            $filename = 'Reporte-' . str_replace(' ', '-', $titulo) . '.pdf';
             $html2Pdf->output($filename);
             exit();
         }
