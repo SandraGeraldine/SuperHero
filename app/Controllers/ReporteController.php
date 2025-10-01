@@ -326,13 +326,11 @@ class ReporteController extends BaseController{
         }
     }
 
-    // REPORTE 6 - Vista principal del formulario personalizado
     public function getReport6()
     {
         return view('reportes/reporte6');
     }
 
-    // REPORTE 6 - Método para generar PDF con parámetros personalizados
     public function Report6PDF()
     {
         $titulo = $this->request->getPost('titulo');
@@ -423,5 +421,62 @@ class ReporteController extends BaseController{
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getMessage();
         }
+    }
+
+    public function getReport7()
+    {
+        return view('reportes/reporte7');
+    }
+
+    public function generateChart7()
+    {
+        $publishers = $this->request->getPost('publishers');
+        
+        if (empty($publishers)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Debe seleccionar al menos una editorial'
+            ]);
+        }
+
+        $cn = \Config\Database::connect();
+        
+        // Construir condiciones WHERE
+        $whereConditions = [];
+        $params = [];
+        
+        foreach ($publishers as $publisher) {
+            if ($publisher === 'na') {
+                $whereConditions[] = "PB.publisher_name IS NULL";
+            } else {
+                $whereConditions[] = "PB.publisher_name LIKE ?";
+                $params[] = '%' . $publisher . '%';
+            }
+        }
+        
+        $whereClause = "WHERE (" . implode(" OR ", $whereConditions) . ")";
+        
+        $query = "
+            SELECT 
+                COALESCE(PB.publisher_name, 'N/A') as publisher_name,
+                COUNT(*) as total_heroes,
+                SUM(CASE WHEN AL.alignment = 'good' THEN 1 ELSE 0 END) as heroes_buenos,
+                SUM(CASE WHEN AL.alignment = 'bad' THEN 1 ELSE 0 END) as heroes_malos,
+                SUM(CASE WHEN AL.alignment = 'neutral' THEN 1 ELSE 0 END) as heroes_neutrales
+            FROM superhero SH
+            LEFT JOIN publisher PB ON SH.publisher_id = PB.id
+            LEFT JOIN alignment AL ON SH.alignment_id = AL.id
+            $whereClause
+            GROUP BY PB.publisher_name
+            ORDER BY total_heroes DESC
+        ";
+        
+        $result = $cn->query($query, $params);
+        $data = $result->getResultArray();
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 }
