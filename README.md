@@ -235,7 +235,7 @@ Este proyecto es un sistema web completo para la gestión y consulta de informac
 
 **Sandra De La Cruz**  
  Email: [1508386@senati.pe]  
- Institución: SENATI - Desarrollo de Software  
+ Institución: SENATI 
  Fecha: Septiembre 2025
 
 ---
