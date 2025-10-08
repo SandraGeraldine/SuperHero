@@ -479,4 +479,115 @@ class ReporteController extends BaseController{
             'data' => $data
         ]);
     }
+
+    public function generateWeightChart7()
+    {
+        $publishers = $this->request->getPost('publishers');
+        
+        if (empty($publishers)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Debe seleccionar al menos una editorial'
+            ]);
+        }
+
+        $cn = \Config\Database::connect();
+        
+        // Construir condiciones WHERE
+        $whereConditions = [];
+        $params = [];
+        
+        foreach ($publishers as $publisher) {
+            if ($publisher === 'na') {
+                $whereConditions[] = "PB.publisher_name IS NULL";
+            } else {
+                $whereConditions[] = "PB.publisher_name LIKE ?";
+                $params[] = '%' . $publisher . '%';
+            }
+        }
+        
+        $whereClause = "WHERE (" . implode(" OR ", $whereConditions) . ") AND SH.weight_kg IS NOT NULL AND SH.weight_kg > 0";
+        
+        $query = "
+            SELECT 
+                COALESCE(PB.publisher_name, 'N/A') as publisher_name,
+                ROUND(AVG(SH.weight_kg), 2) as promedio_peso,
+                COUNT(*) as total_heroes_con_peso,
+                MIN(SH.weight_kg) as peso_minimo,
+                MAX(SH.weight_kg) as peso_maximo
+            FROM superhero SH
+            LEFT JOIN publisher PB ON SH.publisher_id = PB.id
+            LEFT JOIN alignment AL ON SH.alignment_id = AL.id
+            $whereClause
+            GROUP BY PB.publisher_name
+            HAVING COUNT(*) > 0
+            ORDER BY promedio_peso ASC
+        ";
+        
+        $result = $cn->query($query, $params);
+        $data = $result->getResultArray();
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getReport8()
+    {
+        return view('reportes/reporte8');
+    }
+
+    public function generateWeightChart8()
+    {
+        $publishers = $this->request->getPost('publishers');
+        
+        if (empty($publishers)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Debe seleccionar al menos una editorial'
+            ]);
+        }
+
+        $cn = \Config\Database::connect();
+        
+        // Construir condiciones WHERE
+        $whereConditions = [];
+        $params = [];
+        
+        foreach ($publishers as $publisher) {
+            if ($publisher === 'na') {
+                $whereConditions[] = "PB.publisher_name IS NULL";
+            } else {
+                $whereConditions[] = "PB.publisher_name LIKE ?";
+                $params[] = '%' . $publisher . '%';
+            }
+        }
+        
+        $whereClause = "WHERE (" . implode(" OR ", $whereConditions) . ") AND SH.weight_kg IS NOT NULL AND SH.weight_kg > 0";
+        
+        $query = "
+            SELECT 
+                COALESCE(PB.publisher_name, 'N/A') as publisher_name,
+                ROUND(AVG(SH.weight_kg), 2) as promedio_peso,
+                COUNT(*) as total_heroes_con_peso,
+                MIN(SH.weight_kg) as peso_minimo,
+                MAX(SH.weight_kg) as peso_maximo
+            FROM superhero SH
+            LEFT JOIN publisher PB ON SH.publisher_id = PB.id
+            LEFT JOIN alignment AL ON SH.alignment_id = AL.id
+            $whereClause
+            GROUP BY PB.publisher_name
+            HAVING COUNT(*) > 0
+            ORDER BY promedio_peso ASC
+        ";
+        
+        $result = $cn->query($query, $params);
+        $data = $result->getResultArray();
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
 }
