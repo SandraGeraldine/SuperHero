@@ -97,9 +97,34 @@ class AuthController extends Controller
         ];
 
         $messages = [
+            'username' => [
+                'required'    => 'El nombre de usuario es obligatorio',
+                'min_length'  => 'El nombre de usuario debe tener al menos 3 caracteres',
+                'max_length'  => 'El nombre de usuario no puede exceder 100 caracteres',
+                'is_unique'   => 'Este nombre de usuario ya está en uso',
+            ],
+            'email' => [
+                'required'    => 'El correo electrónico es obligatorio',
+                'valid_email' => 'Debe proporcionar un correo electrónico válido',
+                'is_unique'   => 'Este correo electrónico ya está registrado',
+            ],
+            'password' => [
+                'required'   => 'La contraseña es obligatoria',
+                'min_length' => 'La contraseña debe tener al menos 6 caracteres',
+            ],
             'password_confirm' => [
                 'required' => 'Debe confirmar la contraseña',
                 'matches'  => 'Las contraseñas no coinciden',
+            ],
+            'nombre' => [
+                'required'   => 'El nombre es obligatorio',
+                'min_length' => 'El nombre debe tener al menos 2 caracteres',
+                'max_length' => 'El nombre no puede exceder 100 caracteres',
+            ],
+            'apellido' => [
+                'required'   => 'El apellido es obligatorio',
+                'min_length' => 'El apellido debe tener al menos 2 caracteres',
+                'max_length' => 'El apellido no puede exceder 100 caracteres',
             ],
         ];
 

@@ -21,13 +21,13 @@ class User extends Model
         'foto_perfil'
     ];
 
-    // Dates
+    // Datos
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    // Validation
+    // Validaciones
     protected $validationRules = [
         'username' => 'required|min_length[3]|max_length[100]|is_unique[users.username,id,{id}]',
         'email'    => 'required|valid_email|is_unique[users.email,id,{id}]',
@@ -40,6 +40,7 @@ class User extends Model
         'username' => [
             'required'    => 'El nombre de usuario es obligatorio',
             'min_length'  => 'El nombre de usuario debe tener al menos 3 caracteres',
+            'max_length'  => 'El nombre de usuario no puede exceder 100 caracteres',
             'is_unique'   => 'Este nombre de usuario ya está en uso',
         ],
         'email' => [
@@ -52,17 +53,21 @@ class User extends Model
             'min_length' => 'La contraseña debe tener al menos 6 caracteres',
         ],
         'nombre' => [
-            'required' => 'El nombre es obligatorio',
+            'required'   => 'El nombre es obligatorio',
+            'min_length' => 'El nombre debe tener al menos 2 caracteres',
+            'max_length' => 'El nombre no puede exceder 100 caracteres',
         ],
         'apellido' => [
-            'required' => 'El apellido es obligatorio',
+            'required'   => 'El apellido es obligatorio',
+            'min_length' => 'El apellido debe tener al menos 2 caracteres',
+            'max_length' => 'El apellido no puede exceder 100 caracteres',
         ],
     ];
 
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
+    // Eventos
     protected $beforeInsert = ['hashPassword'];
     protected $beforeUpdate = ['hashPassword'];
 
@@ -102,6 +107,6 @@ class User extends Model
             return base_url('uploads/perfiles/' . $user['foto_perfil']);
         }
         
-        return base_url('assets/img/default-avatar.png');
+        return base_url('assets/img/default-avatar.svg');
     }
 }

@@ -96,6 +96,14 @@
     </style>
 </head>
 <body>
+    <!-- Datos de prueba -->
+    <div style="position: fixed; top: 20px; right: 20px; background: white; padding: 15px 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1000;">
+        <h5 style="color: #667eea; margin-bottom: 10px;">Datos de Prueba</h5>
+        <p style="margin: 5px 0; color: #555;"><strong>Usuario:</strong> admin</p>
+        <p style="margin: 5px 0; color: #555;"><strong>Contraseña:</strong> admin123</p>
+        <hr style="margin: 10px 0;">
+        <small style="color: #999;">También puedes usar: usuario1 / password123</small>
+    </div>
     <div class="login-container">
         <div class="login-left">
             <i class="fas fa-mask"></i>

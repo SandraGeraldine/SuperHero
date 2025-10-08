@@ -118,19 +118,16 @@
                 </ul>
             </div>
         </div>
-    </nav>
-
     <div class="profile-container">
         <div class="profile-card">
             <div class="profile-header">
                 <?php
-                $fotoPerfil = base_url('assets/img/default-avatar.png');
+                $fotoPerfil = base_url('assets/img/default-avatar.svg');
                 if ($user['foto_perfil'] && file_exists(FCPATH . 'uploads/perfiles/' . $user['foto_perfil'])) {
                     $fotoPerfil = base_url('uploads/perfiles/' . $user['foto_perfil']);
                 }
                 ?>
-                <img src="<?= $fotoPerfil ?>" alt="Foto de perfil" class="profile-avatar" id="preview-avatar">
-                <h2><?= esc($user['nombre'] . ' ' . $user['apellido']) ?></h2>
+                <img src="<?= $fotoPerfil ?>" alt="Foto de Perfil" class="profile-avatar rounded-circle" id="preview-avatar" style="object-fit: cover;">
                 <p><i class="fas fa-at"></i> <?= esc($user['username']) ?></p>
             </div>
 

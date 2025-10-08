@@ -105,7 +105,7 @@ class DashboardController extends BaseController{
         //Datos encontrados. 
         return $this->response->setJSON([
           'success' => true,
-          'message'=> 'Aligbnments obtenidos',
+          'message'=> 'Alignments obtenidos',
           'resumen' => $data
         ]);
       }

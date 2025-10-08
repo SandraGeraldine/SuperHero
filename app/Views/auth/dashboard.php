@@ -113,10 +113,10 @@
     </nav>
 
     <div class="dashboard-container">
-        <!-- Welcome Card -->
+        <!-- Bienvenida-->
         <div class="welcome-card">
             <?php
-            $fotoPerfil = base_url('assets/img/default-avatar.png');
+            $fotoPerfil = base_url('assets/img/default-avatar.svg');
             if (session()->get('foto_perfil') && file_exists(FCPATH . 'uploads/perfiles/' . session()->get('foto_perfil'))) {
                 $fotoPerfil = base_url('uploads/perfiles/' . session()->get('foto_perfil'));
             }
@@ -135,7 +135,7 @@
             </div>
         <?php endif; ?>
 
-        <!-- Stats Cards -->
+        <!-- PARTE DE LA PRESENTACION -->
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="stats-card text-center">
@@ -166,7 +166,7 @@
             </div>
         </div>
 
-        <!-- Menu Cards -->
+        <!-- Menu  -->
         <h3 class="mb-4">Accesos Rápidos</h3>
         <div class="row">
             <div class="col-md-6 col-lg-4">
