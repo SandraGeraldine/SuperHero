@@ -43,7 +43,7 @@ Sistema web para gestionar y consultar información de superhéroes. Permite bú
    ```bash
    php spark serve
    ```
-   Accede a [http://localhost:8080](http://localhost:8080)
+   Accede a [http://superhero.test](http://superhero.test)
 
 ---
 
