@@ -37,13 +37,13 @@ Sistema web para gestionar y consultar información de superhéroes. Permite bú
    - Importa los archivos SQL en la carpeta `/database` (en orden si hay varios).
 
 4. **Configura el entorno**
-   - Copia `.env.example` a `.env` y ajusta tus credenciales de base de datos.
+   -`.env` y ajusta tus credenciales de base de datos.
 
 5. **Inicia el servidor**
    ```bash
    php spark serve
    ```
-   Accede a [http://localhost:8080](http://localhost:8080)
+   Accede a [http://superhero.test/login](superhero.test/login)
 
 ---
 
